@@ -1,0 +1,68 @@
+get composer.phar from https://github.com/laravel/quickstart-basic
+
+php composer.phar create-project laravel/laravel quickstart --prefer-dist
+
+in your folder there will be quickstart folder after this
+
+cd quickstart
+
+DB migrations /backend db creation:
+  create migration file:
+    php artisan make:migration create_tasks_table --create=tasks
+  run migration and create table:
+    php artisan migrate
+    or
+    php artisan migrate --env=production
+
+  if this doesnt work then edit .env file in laravel folder and set
+  DB_HOST=127.0.0.1
+  DB_DATABASE=laravel_db
+  DB_USERNAME=laravel
+  DB_PASSWORD=laravel
+
+  At mysql:
+  create database laravel_db
+  CREATE USER 'laravel'@'localhost' IDENTIFIED BY 'laravel';
+  GRANT ALL PRIVILEGES ON `laravel_db`.* TO 'laravel'@'localhost' with grant option;
+
+Create Model:
+  php artisan make:model Task
+
+
+To Run application:
+php artisan serve
+  access: http://localhost:8000/
+
+php artisan serve --port=8080
+
+
+
+
+
+undefined error exception:
+
+in App->Http->Kernel.php
+this should be the contents of middleware and middlewaregroups should be empty:
+
+  protected $middleware = [
+        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \App\Http\Middleware\EncryptCookies::class,
+        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+        \Illuminate\Session\Middleware\StartSession::class,
+        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        \App\Http\Middleware\VerifyCsrfToken::class,
+    ];
+
+    /**
+     * The application's route middleware groups.
+     *
+     * @var array
+     */
+    protected $middlewareGroups = [
+        'web' => [
+        ],
+
+        'api' => [
+            'throttle:60,1',
+        ],
+    ];
